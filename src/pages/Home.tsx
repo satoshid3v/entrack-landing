@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { BrandLogo } from '../components/BrandLogo';
 import { ROICalculator } from '../components/ROICalculator';
+import { VideoShowcase } from '../components/VideoShowcase';
 
 interface HomeProps {
   appUrl?: string;
@@ -23,13 +24,11 @@ export const Home: FC<HomeProps> = ({
           <BrandLogo size={26} className="text-[#0066cc]" />
           <div className="flex items-center gap-2">
             <span className="font-semibold text-lg tracking-tight text-[#1d1d1f]">Entrack</span>
-            <span className="text-[10px] font-bold uppercase tracking-wider bg-[#0066cc]/10 text-[#0066cc] px-2 py-0.5 rounded-full">
-              Landing
-            </span>
           </div>
         </div>
 
         <nav className="hidden md:flex items-center gap-8 text-xs font-medium text-[#86868b]">
+          <a href="#video-presentation" className="hover:text-[#1d1d1f] transition-colors">Video</a>
           <a href="#roi-calculator" className="hover:text-[#1d1d1f] transition-colors">Calculadora ROI</a>
           <a href="#features" className="hover:text-[#1d1d1f] transition-colors">Funcionalidades</a>
           <a href="#faq" className="hover:text-[#1d1d1f] transition-colors">Preguntas Frecuentes</a>
@@ -100,6 +99,11 @@ export const Home: FC<HomeProps> = ({
             <span>Soporte PWA 100% Offline</span>
           </div>
         </div>
+      </section>
+
+      {/* 2.5 Video Presentation Showcase (Brag Skill) */}
+      <section className="py-8 px-6 max-w-6xl mx-auto">
+        <VideoShowcase appUrl={appUrl} />
       </section>
 
       {/* 3. Interactive ROI Calculator */}

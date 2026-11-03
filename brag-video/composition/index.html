@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="es" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --ground: #f5f5f7;
+        --ink: #1d1d1f;
+        --muted: #86868b;
+        --blue: #0066cc;
+        --emerald: #10b981;
+        --rose: #ef4444;
+        --border: #e5e5ea;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html, body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--ground);
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+        color: var(--ink);
+      }
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--ground);
+      }
+      .scene {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 80px;
+        opacity: 0;
+        pointer-events: none;
+      }
+      .apple-card {
+        background: #ffffff;
+        border-radius: 32px;
+        border: 1px solid var(--border);
+        box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.05);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="18"
+      data-width="1920"
+      data-height="1080"
+    >
+      <!-- Background Audio -->
+      <audio id="bgm" data-start="0" data-duration="18" data-track-index="1" data-volume="0.8" src="assets/music.mp3"></audio>
+
+      <!-- SCENE 1: The Problem / Hook (0s - 4.5s) -->
+      <div id="scene1" class="scene clip" data-start="0" data-duration="4.5">
+        <div id="s1-tag" class="px-5 py-2 rounded-full bg-rose-100 text-rose-600 text-lg font-bold uppercase tracking-wider mb-8">
+          Fuga Invisible de Capital
+        </div>
+        <h1 id="s1-title" class="text-6xl font-extrabold text-center max-w-5xl leading-tight mb-10 tracking-tight">
+          ¿Cuánto dinero pierde tu empresa en hardware telemático desinstalado?
+        </h1>
+        <div id="s1-card" class="apple-card p-10 max-w-3xl w-full text-center border-rose-200 bg-rose-50/40">
+          <p class="text-xl font-semibold text-gray-500 mb-2">Equipos FDU durmiendo en maletas de técnicos:</p>
+          <div id="s1-counter" class="text-7xl font-extrabold text-rose-600 tracking-tight">
+            $134.400.000 COP / año
+          </div>
+          <p class="text-lg text-gray-400 mt-3 font-medium">~420 dispositivos y SIMs inactivas facturando sin vehículo</p>
+        </div>
+      </div>
+
+      <!-- SCENE 2: The Solution / Product Reveal (4.5s - 9.0s) -->
+      <div id="scene2" class="scene clip" data-start="4.5" data-duration="4.5">
+        <div id="s2-logo-wrap" class="flex items-center gap-4 mb-6">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" class="text-[#0066cc]">
+            <path d="M 8 9 L 2 13 L 8 19 L 12 3 L 16 19 L 22 13 L 16 9" stroke="#0066cc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <span class="text-5xl font-extrabold tracking-tight text-[#1d1d1f]">Entrack</span>
+          <span class="text-lg font-bold uppercase tracking-wider bg-blue-100 text-[#0066cc] px-4 py-1 rounded-full">
+            Vertice Codeium
+          </span>
+        </div>
+        <h2 id="s2-title" class="text-5xl font-bold text-center max-w-4xl tracking-tight mb-10 text-gray-800">
+          El Sistema Operativo de Telemetría e Inventario de Flotas
+        </h2>
+        
+        <!-- Live IMEI Scanning Mock Card -->
+        <div id="s2-card" class="apple-card p-8 max-w-4xl w-full flex items-center justify-between border-blue-200 shadow-xl bg-white">
+          <div class="flex items-center gap-6">
+            <div class="w-16 h-16 rounded-2xl bg-blue-50 text-[#0066cc] flex items-center justify-center font-bold text-2xl">
+              IMEI
+            </div>
+            <div>
+              <div class="flex items-center gap-3">
+                <span class="text-2xl font-mono font-bold text-gray-900 tracking-wider">869402049182310</span>
+                <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold uppercase">Escaneado DataMatrix</span>
+              </div>
+              <p class="text-base text-gray-500 mt-1">Queclink GV300 • SIM 3108924510 • Bodega Central → Cuadrilla #04</p>
+            </div>
+          </div>
+          <div class="px-6 py-3 rounded-2xl bg-emerald-500 text-white font-bold text-sm">
+            ✓ Trazabilidad 100% Nominal
+          </div>
+        </div>
+      </div>
+
+      <!-- SCENE 3: Core Features & ROI Recovery (9.0s - 13.5s) -->
+      <div id="scene3" class="scene clip" data-start="9.0" data-duration="4.5">
+        <h2 id="s3-title" class="text-5xl font-extrabold tracking-tight text-center mb-10">
+          Blindaje Operativo y Retorno de Inversión Inmediato
+        </h2>
+        
+        <div id="s3-grid" class="grid grid-cols-3 gap-8 max-w-6xl w-full mb-10">
+          <div class="apple-card p-8 text-left border-gray-200">
+            <div class="text-rose-500 font-bold text-lg mb-2">1. Flujo FDU & Garantías</div>
+            <p class="text-base text-gray-600 leading-relaxed">Diagnóstico de laboratorio, clasificación de baterías y RMA con fabricantes.</p>
+          </div>
+          <div class="apple-card p-8 text-left border-gray-200">
+            <div class="text-amber-500 font-bold text-lg mb-2">2. Custodia de Herramientas</div>
+            <p class="text-base text-gray-600 leading-relaxed">Paz y salvo nominal de multímetros, arneses y sensores por instalador.</p>
+          </div>
+          <div class="apple-card p-8 text-left border-gray-200">
+            <div class="text-purple-500 font-bold text-lg mb-2">3. Alertas de Zonas Rojas</div>
+            <p class="text-base text-gray-600 leading-relaxed">Geocercas preventivas en ruta para proteger cuadrillas y activos.</p>
+          </div>
+        </div>
+
+        <div id="s3-savings" class="apple-card p-6 px-12 bg-gradient-to-r from-emerald-600 to-teal-700 text-white flex items-center justify-between max-w-4xl w-full shadow-xl">
+          <div>
+            <span class="text-sm font-semibold uppercase tracking-wider text-emerald-100 block">Ahorro Anual Proyectado con Entrack:</span>
+            <span class="text-4xl font-extrabold">+$97.920.000 COP</span>
+          </div>
+          <div class="text-right">
+            <span class="text-3xl font-extrabold text-emerald-300">85%</span>
+            <span class="text-xs uppercase font-bold text-emerald-100 block">Recuperación de Inventario</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCENE 4: Outro / Final CTA (13.5s - 18.0s) -->
+      <div id="scene4" class="scene clip" data-start="13.5" data-duration="4.5">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" class="mb-6">
+          <path d="M 8 9 L 2 13 L 8 19 L 12 3 L 16 19 L 22 13 L 16 9" stroke="#0066cc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <h1 id="s4-title" class="text-6xl font-extrabold text-center max-w-5xl tracking-tight mb-6 leading-tight">
+          Reduce pérdidas en un <span class="text-[#0066cc]">35%</span> y audita cada GPS en tiempo real.
+        </h1>
+        <p id="s4-sub" class="text-2xl text-gray-500 font-medium text-center max-w-2xl mb-10">
+          La primera plataforma de inventario de flotas con estándar Apple y arquitectura Zero-Trust.
+        </p>
+
+        <div id="s4-cta" class="flex items-center gap-6">
+          <div class="px-10 py-5 rounded-full bg-[#0066cc] text-white text-xl font-bold shadow-2xl">
+            EntrackSystem • Demo Disponible
+          </div>
+          <div class="px-8 py-5 rounded-full bg-white border border-gray-300 text-gray-800 text-xl font-bold shadow-sm">
+            app.entrack.co
+          </div>
+        </div>
+
+        <div id="s4-footer" class="mt-16 text-center">
+          <p class="text-sm font-semibold text-gray-400 tracking-wider uppercase">Desarrollado y Distribuido por</p>
+          <p class="text-lg font-bold text-gray-800 tracking-tight">VERTICE CODEIUM</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- GSAP Master Animation Timeline -->
+    <script>
+      const tl = gsap.timeline({ paused: true });
+
+      // SCENE 1: 0.0s - 4.5s
+      tl.to("#scene1", { opacity: 1, duration: 0.3 }, 0.0)
+        .fromTo("#s1-tag", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 0.2)
+        .fromTo("#s1-title", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, 0.4)
+        .fromTo("#s1-card", { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: "back.out(1.5)" }, 0.8)
+        .to("#scene1", { opacity: 0, scale: 0.96, duration: 0.4, ease: "power2.in" }, 4.1);
+
+      // SCENE 2: 4.5s - 9.0s
+      tl.to("#scene2", { opacity: 1, duration: 0.3 }, 4.5)
+        .fromTo("#s2-logo-wrap", { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "power3.out" }, 4.7)
+        .fromTo("#s2-title", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 5.0)
+        .fromTo("#s2-card", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, 5.3)
+        .to("#scene2", { opacity: 0, scale: 0.96, duration: 0.4, ease: "power2.in" }, 8.6);
+
+      // SCENE 3: 9.0s - 13.5s
+      tl.to("#scene3", { opacity: 1, duration: 0.3 }, 9.0)
+        .fromTo("#s3-title", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 9.2)
+        .fromTo("#s3-grid > div", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, stagger: 0.15, ease: "power3.out" }, 9.5)
+        .fromTo("#s3-savings", { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: "back.out(1.4)" }, 10.3)
+        .to("#scene3", { opacity: 0, scale: 0.96, duration: 0.4, ease: "power2.in" }, 13.1);
+
+      // SCENE 4: 13.5s - 18.0s
+      tl.to("#scene4", { opacity: 1, duration: 0.4 }, 13.5)
+        .fromTo("#scene4 svg", { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.7)" }, 13.7)
+        .fromTo("#s4-title", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, 14.0)
+        .fromTo("#s4-sub", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 14.3)
+        .fromTo("#s4-cta", { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: "back.out(1.5)" }, 14.7)
+        .fromTo("#s4-footer", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 15.3);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

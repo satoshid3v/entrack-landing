@@ -27,3 +27,6 @@ tsconfig.tsbuildinfo
 .env
 .env.*
 !.env.example
+
+# Hyperframes
+.hyperframes/
