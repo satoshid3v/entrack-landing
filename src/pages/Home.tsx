@@ -7,6 +7,7 @@ import {
 import { BrandLogo } from '../components/BrandLogo';
 import { ROICalculator } from '../components/ROICalculator';
 import { VideoShowcase } from '../components/VideoShowcase';
+import { ArchitectureSection } from '../components/ArchitectureSection';
 
 interface HomeProps {
   appUrl?: string;
@@ -31,6 +32,7 @@ export const Home: FC<HomeProps> = ({
           <a href="#video-presentation" className="hover:text-[#1d1d1f] transition-colors">Video</a>
           <a href="#roi-calculator" className="hover:text-[#1d1d1f] transition-colors">Calculadora ROI</a>
           <a href="#features" className="hover:text-[#1d1d1f] transition-colors">Funcionalidades</a>
+          <a href="#architecture" className="hover:text-[#1d1d1f] transition-colors">Arquitectura</a>
           <a href="#faq" className="hover:text-[#1d1d1f] transition-colors">Preguntas Frecuentes</a>
         </nav>
 
@@ -214,7 +216,10 @@ export const Home: FC<HomeProps> = ({
         </div>
       </section>
 
-      {/* 5. FAQ Section */}
+      {/* 5. Zero-Trust Architecture Section */}
+      <ArchitectureSection />
+
+      {/* 6. FAQ Section */}
       <section id="faq" className="py-20 px-6 max-w-4xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-xs font-semibold uppercase tracking-wider text-[#0066cc] bg-[#0066cc]/10 px-3 py-1 rounded-full">
