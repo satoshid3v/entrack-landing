@@ -6,13 +6,16 @@
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
     <style>
       :root {
-        --ground: #f5f5f7;
-        --ink: #1d1d1f;
-        --muted: #86868b;
-        --blue: #0066cc;
-        --emerald: #10b981;
-        --rose: #ef4444;
-        --border: #e5e5ea;
+        --bg-dark: #070a14;
+        --bg-card: rgba(15, 23, 42, 0.75);
+        --blue-primary: #0066cc;
+        --blue-glow: #0088ff;
+        --cyan-glow: #00f0ff;
+        --emerald-glow: #10b981;
+        --rose-glow: #f43f5e;
+        --border-glass: rgba(255, 255, 255, 0.12);
+        --text-white: #ffffff;
+        --text-muted: #94a3b8;
       }
       * {
         margin: 0;
@@ -24,17 +27,27 @@
         width: 1920px;
         height: 1080px;
         overflow: hidden;
-        background: var(--ground);
+        background: var(--bg-dark);
         font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
-        color: var(--ink);
+        color: var(--text-white);
       }
       #root {
         position: relative;
         width: 1920px;
         height: 1080px;
         overflow: hidden;
-        background: var(--ground);
+        background: radial-gradient(circle at 50% 20%, #111c38 0%, #060913 80%);
       }
+
+      /* Ambient Glow Orbs */
+      .glow-orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(120px);
+        pointer-events: none;
+        opacity: 0.45;
+      }
+
       .scene {
         position: absolute;
         inset: 0;
@@ -42,15 +55,65 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 80px;
+        padding: 60px 100px;
         opacity: 0;
         pointer-events: none;
       }
-      .apple-card {
-        background: #ffffff;
-        border-radius: 32px;
-        border: 1px solid var(--border);
-        box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.05);
+
+      /* Glassmorphism Cards */
+      .glass-panel {
+        background: rgba(15, 23, 42, 0.82);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid var(--border-glass);
+        border-radius: 28px;
+        box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 40px rgba(0, 102, 204, 0.15);
+      }
+
+      .glass-window {
+        background: rgba(13, 19, 36, 0.92);
+        backdrop-filter: blur(30px);
+        border: 1px solid rgba(0, 150, 255, 0.25);
+        border-radius: 24px;
+        box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.85), 0 0 60px rgba(0, 102, 204, 0.2);
+      }
+
+      /* Scanline Laser Effect */
+      .scanner-laser {
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, #00f0ff, #ffffff, #00f0ff, transparent);
+        box-shadow: 0 0 15px #00f0ff, 0 0 30px #00f0ff;
+      }
+
+      /* Radar Pulse */
+      .radar-circle {
+        border: 1px solid rgba(0, 240, 255, 0.25);
+        border-radius: 50%;
+        position: absolute;
+      }
+
+      /* Cursor Simulation */
+      .mouse-cursor {
+        position: absolute;
+        width: 32px;
+        height: 32px;
+        z-index: 100;
+        pointer-events: none;
+        filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
+      }
+
+      .pulse-beacon {
+        box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.7);
+        animation: pulse-ring 1.5s infinite;
+      }
+
+      @keyframes pulse-ring {
+        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.7); }
+        70% { transform: scale(1); box-shadow: 0 0 0 20px rgba(244, 63, 94, 0); }
+        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); }
       }
     </style>
   </head>
@@ -63,155 +126,272 @@
       data-width="1920"
       data-height="1080"
     >
-      <!-- Background Audio -->
-      <audio id="bgm" data-start="0" data-duration="18" data-track-index="1" data-volume="0.8" src="assets/music.mp3"></audio>
+      <!-- Background Dynamic Audio -->
+      <audio id="bgm" data-start="0" data-duration="18" data-track-index="1" data-volume="0.85" src="assets/music.mp3"></audio>
 
-      <!-- SCENE 1: The Problem / Hook (0s - 4.5s) -->
-      <div id="scene1" class="scene clip" data-start="0" data-duration="4.5">
-        <div id="s1-tag" class="px-5 py-2 rounded-full bg-rose-100 text-rose-600 text-lg font-bold uppercase tracking-wider mb-8">
-          Fuga Invisible de Capital
-        </div>
-        <h1 id="s1-title" class="text-6xl font-extrabold text-center max-w-5xl leading-tight mb-10 tracking-tight">
-          ¿Cuánto dinero pierde tu empresa en hardware telemático desinstalado?
-        </h1>
-        <div id="s1-card" class="apple-card p-10 max-w-3xl w-full text-center border-rose-200 bg-rose-50/40">
-          <p class="text-xl font-semibold text-gray-500 mb-2">Equipos FDU durmiendo en maletas de técnicos:</p>
-          <div id="s1-counter" class="text-7xl font-extrabold text-rose-600 tracking-tight">
-            $134.400.000 COP / año
-          </div>
-          <p class="text-lg text-gray-400 mt-3 font-medium">~420 dispositivos y SIMs inactivas facturando sin vehículo</p>
-        </div>
-      </div>
+      <!-- Ambient Glow Orbs -->
+      <div id="orb-blue" class="glow-orb" data-layout-allow-overflow="true" style="width: 700px; height: 700px; background: #0066cc; top: -150px; left: -100px;"></div>
+      <div id="orb-cyan" class="glow-orb" data-layout-allow-overflow="true" style="width: 600px; height: 600px; background: #00f0ff; bottom: -100px; right: -50px; opacity: 0.3;"></div>
 
-      <!-- SCENE 2: The Solution / Product Reveal (4.5s - 9.0s) -->
-      <div id="scene2" class="scene clip" data-start="4.5" data-duration="4.5">
-        <div id="s2-logo-wrap" class="flex items-center gap-4 mb-6">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" class="text-[#0066cc]">
-            <path d="M 8 9 L 2 13 L 8 19 L 12 3 L 16 19 L 22 13 L 16 9" stroke="#0066cc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-          <span class="text-5xl font-extrabold tracking-tight text-[#1d1d1f]">Entrack</span>
-          <span class="text-lg font-bold uppercase tracking-wider bg-blue-100 text-[#0066cc] px-4 py-1 rounded-full">
-            Vertice Codeium
+      <!-- ============================================================ -->
+      <!-- SCENE 1: THE TENSION / CAPITAL LEAK (0.0s - 4.2s)           -->
+      <!-- ============================================================ -->
+      <div id="scene1" class="scene clip" data-start="0" data-duration="4.2">
+        
+        <!-- Emergency Badge -->
+        <div id="s1-badge" class="glass-panel" style="padding: 10px 24px; border-color: rgba(244, 63, 94, 0.4); background: rgba(244, 63, 94, 0.12); margin-bottom: 24px;">
+          <span style="color: #f43f5e; font-size: 28px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px;">
+            ⚠️ FUGA INVISIBLE EN FLOTAS DE TRANSPORTE
           </span>
         </div>
-        <h2 id="s2-title" class="text-5xl font-bold text-center max-w-4xl tracking-tight mb-10 text-gray-800">
-          El Sistema Operativo de Telemetría e Inventario de Flotas
-        </h2>
-        
-        <!-- Live IMEI Scanning Mock Card -->
-        <div id="s2-card" class="apple-card p-8 max-w-4xl w-full flex items-center justify-between border-blue-200 shadow-xl bg-white">
-          <div class="flex items-center gap-6">
-            <div class="w-16 h-16 rounded-2xl bg-blue-50 text-[#0066cc] flex items-center justify-center font-bold text-2xl">
-              IMEI
-            </div>
-            <div>
-              <div class="flex items-center gap-3">
-                <span class="text-2xl font-mono font-bold text-gray-900 tracking-wider">869402049182310</span>
-                <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold uppercase">Escaneado DataMatrix</span>
-              </div>
-              <p class="text-base text-gray-500 mt-1">Queclink GV300 • SIM 3108924510 • Bodega Central → Cuadrilla #04</p>
-            </div>
-          </div>
-          <div class="px-6 py-3 rounded-2xl bg-emerald-500 text-white font-bold text-sm">
-            ✓ Trazabilidad 100% Nominal
-          </div>
-        </div>
-      </div>
 
-      <!-- SCENE 3: Core Features & ROI Recovery (9.0s - 13.5s) -->
-      <div id="scene3" class="scene clip" data-start="9.0" data-duration="4.5">
-        <h2 id="s3-title" class="text-5xl font-extrabold tracking-tight text-center mb-10">
-          Blindaje Operativo y Retorno de Inversión Inmediato
-        </h2>
-        
-        <div id="s3-grid" class="grid grid-cols-3 gap-8 max-w-6xl w-full mb-10">
-          <div class="apple-card p-8 text-left border-gray-200">
-            <div class="text-rose-500 font-bold text-lg mb-2">1. Flujo FDU & Garantías</div>
-            <p class="text-base text-gray-600 leading-relaxed">Diagnóstico de laboratorio, clasificación de baterías y RMA con fabricantes.</p>
-          </div>
-          <div class="apple-card p-8 text-left border-gray-200">
-            <div class="text-amber-500 font-bold text-lg mb-2">2. Custodia de Herramientas</div>
-            <p class="text-base text-gray-600 leading-relaxed">Paz y salvo nominal de multímetros, arneses y sensores por instalador.</p>
-          </div>
-          <div class="apple-card p-8 text-left border-gray-200">
-            <div class="text-purple-500 font-bold text-lg mb-2">3. Alertas de Zonas Rojas</div>
-            <p class="text-base text-gray-600 leading-relaxed">Geocercas preventivas en ruta para proteger cuadrillas y activos.</p>
-          </div>
-        </div>
-
-        <div id="s3-savings" class="apple-card p-6 px-12 bg-gradient-to-r from-emerald-600 to-teal-700 text-white flex items-center justify-between max-w-4xl w-full shadow-xl">
-          <div>
-            <span class="text-sm font-semibold uppercase tracking-wider text-emerald-100 block">Ahorro Anual Proyectado con Entrack:</span>
-            <span class="text-4xl font-extrabold">+$97.920.000 COP</span>
-          </div>
-          <div class="text-right">
-            <span class="text-3xl font-extrabold text-emerald-300">85%</span>
-            <span class="text-xs uppercase font-bold text-emerald-100 block">Recuperación de Inventario</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- SCENE 4: Outro / Final CTA (13.5s - 18.0s) -->
-      <div id="scene4" class="scene clip" data-start="13.5" data-duration="4.5">
-        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" class="mb-6">
-          <path d="M 8 9 L 2 13 L 8 19 L 12 3 L 16 19 L 22 13 L 16 9" stroke="#0066cc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-        <h1 id="s4-title" class="text-6xl font-extrabold text-center max-w-5xl tracking-tight mb-6 leading-tight">
-          Reduce pérdidas en un <span class="text-[#0066cc]">35%</span> y audita cada GPS en tiempo real.
+        <!-- Big Provocative Headline -->
+        <h1 id="s1-headline" style="font-size: 68px; font-weight: 900; line-height: 1.12; text-align: center; max-width: 1400px; margin-bottom: 32px; letter-spacing: -1.5px;">
+          ¿Cuántos dispositivos GPS desaparecen al mes entre maleteros y talleres?
         </h1>
-        <p id="s4-sub" class="text-2xl text-gray-500 font-medium text-center max-w-2xl mb-10">
-          La primera plataforma de inventario de flotas con estándar Apple y arquitectura Zero-Trust.
+
+        <!-- High-Impact Glass Card: The Cost Counter -->
+        <div id="s1-card" class="glass-panel" style="padding: 40px 80px; max-width: 1100px; width: 100%; text-align: center; border-color: rgba(244, 63, 94, 0.35);">
+          <div style="font-size: 30px; font-weight: 600; color: #94a3b8; margin-bottom: 12px;">
+            Pérdida anual promedio por descontrol físico:
+          </div>
+          <div id="s1-counter" style="font-size: 84px; font-weight: 900; color: #f43f5e; text-shadow: 0 0 35px rgba(244, 63, 94, 0.5); letter-spacing: -2px; margin-bottom: 16px;">
+            $134.400.000 COP
+          </div>
+          <div style="display: flex; justify-content: center; gap: 40px; font-size: 28px; color: #cbd5e1; font-weight: 500;">
+            <span>• 420 GPS sin rastreo de custodia</span>
+            <span>• SIMs activas facturando sin vehículo</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- SCENE 2: THE REVEAL & NOMINAL TRACEABILITY (4.2s - 9.0s)      -->
+      <!-- ============================================================ -->
+      <div id="scene2" class="scene clip" data-start="4.2" data-duration="4.8">
+        
+        <!-- Brand Header Bar -->
+        <div id="s2-brand" style="display: flex; items-center; gap: 18px; margin-bottom: 24px; align-items: center;">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none">
+            <path d="M 8 9 L 2 13 L 8 19 L 12 3 L 16 19 L 22 13 L 16 9" stroke="#00f0ff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <span style="font-size: 46px; font-weight: 900; letter-spacing: -1px; color: #ffffff;">Entrack</span>
+          <span style="padding: 6px 18px; border-radius: 9999px; background: rgba(0, 102, 204, 0.3); border: 1px solid rgba(0, 240, 255, 0.4); color: #00f0ff; font-size: 28px; font-weight: 700; text-transform: uppercase;">
+            Trazabilidad Nominal
+          </span>
+        </div>
+
+        <h2 id="s2-title" style="font-size: 54px; font-weight: 800; text-align: center; max-width: 1200px; margin-bottom: 30px; letter-spacing: -1px;">
+          Escaneo Inteligente e Identificación Instantánea
+        </h2>
+
+        <!-- Interactive Telematics Workstation Window -->
+        <div id="s2-window" class="glass-window" style="width: 1300px; padding: 36px 48px; position: relative; overflow: hidden;">
+          
+          <!-- Laser Scanline Animation -->
+          <div id="laser-line" class="scanner-laser" style="top: 0;"></div>
+
+          <!-- Top Search Mockup -->
+          <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 24px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 28px;">
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <div style="width: 16px; height: 16px; border-radius: 50%; background: #f43f5e;" data-layout-ignore="true"></div>
+              <div style="width: 16px; height: 16px; border-radius: 50%; background: #fbbf24;" data-layout-ignore="true"></div>
+              <div style="width: 16px; height: 16px; border-radius: 50%; background: #10b981;" data-layout-ignore="true"></div>
+              <span style="font-family: monospace; font-size: 28px; color: #94a3b8; margin-left: 16px;">
+                Búsqueda Global: <strong style="color: #00f0ff;">IMEI 869402049182310</strong>
+              </span>
+            </div>
+            <span style="padding: 6px 16px; border-radius: 8px; background: rgba(16, 185, 129, 0.2); color: #10b981; font-weight: 700; font-size: 28px; border: 1px solid rgba(16, 185, 129, 0.4);">
+              ✓ IDENTIFICADO (0.3 ms)
+            </span>
+          </div>
+
+          <!-- Lifecycle Flow Ribbon -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; text-align: left;">
+            
+            <div class="glass-panel" style="padding: 24px; border-color: rgba(255, 255, 255, 0.1);">
+              <div style="font-size: 28px; color: #94a3b8; font-weight: 600; margin-bottom: 8px;">1. Entrada en Bodega</div>
+              <div style="font-size: 32px; font-weight: 800; color: #ffffff;">Bodega Central Bogotá</div>
+              <div style="font-size: 28px; color: #00f0ff; margin-top: 4px; font-family: monospace;">Queclink GV300 4G</div>
+            </div>
+
+            <div class="glass-panel" style="padding: 24px; border-color: rgba(0, 102, 204, 0.4); background: rgba(0, 102, 204, 0.15);">
+              <div style="font-size: 28px; color: #94a3b8; font-weight: 600; margin-bottom: 8px;">2. Despacho a Móvil</div>
+              <div style="font-size: 32px; font-weight: 800; color: #38bdf8;">Cuadrilla Técnica #04</div>
+              <div style="font-size: 28px; color: #cbd5e1; margin-top: 4px;">Técnico: Carlos Mendoza</div>
+            </div>
+
+            <div class="glass-panel" style="padding: 24px; border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.15);">
+              <div style="font-size: 28px; color: #94a3b8; font-weight: 600; margin-bottom: 8px;">3. Instalación Final</div>
+              <div style="font-size: 32px; font-weight: 800; color: #10b981;">Vehículo Placa WXN-412</div>
+              <div style="font-size: 28px; color: #a7f3d0; margin-top: 4px;">Acta FDU Firmada Digitalmente</div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- SCENE 3: OPERATIONAL SHIELD & RADAR (9.0s - 13.5s)           -->
+      <!-- ============================================================ -->
+      <div id="scene3" class="scene clip" data-start="9.0" data-duration="4.5">
+        
+        <h2 id="s3-headline" style="font-size: 58px; font-weight: 900; text-align: center; margin-bottom: 30px; letter-spacing: -1.5px;">
+          Laboratorio FDU & Radar de Zonas Rojas
+        </h2>
+
+        <div id="s3-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 36px; width: 1400px; margin-bottom: 28px;">
+          
+          <!-- Card Left: FDU Lab Diagnosis -->
+          <div class="glass-window" style="padding: 36px; text-align: left;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+              <span style="font-size: 32px; font-weight: 800; color: #f43f5e;">Diagnóstico de Laboratorio FDU</span>
+              <span style="padding: 4px 14px; border-radius: 9999px; background: rgba(244, 63, 94, 0.2); color: #f43f5e; font-size: 28px; font-weight: 700;">RMA Fabricante</span>
+            </div>
+            <div style="space-y: 12px; font-size: 28px; line-height: 1.6; color: #cbd5e1;">
+              <div>• Batería de Respaldo: <strong style="color: #10b981;">Óptima (98%)</strong></div>
+              <div>• Diagnóstico RF / Antena: <strong style="color: #fbbf24;">Calibración Aprobada</strong></div>
+              <div>• Destino Operativo: <strong style="color: #38bdf8;">Reingreso a Stock Activo</strong></div>
+            </div>
+          </div>
+
+          <!-- Card Right: Red Zone Radar -->
+          <div class="glass-window" style="padding: 36px; text-align: left; position: relative; overflow: hidden;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+              <span style="font-size: 32px; font-weight: 800; color: #fbbf24;">Radar de Zonas Rojas</span>
+              <span style="padding: 4px 14px; border-radius: 9999px; background: rgba(251, 191, 36, 0.2); color: #fbbf24; font-size: 28px; font-weight: 700;">Geocerca Activa</span>
+            </div>
+            <div style="font-size: 28px; line-height: 1.6; color: #cbd5e1;">
+              <div>• Cuadrante de Riesgo: <strong style="color: #ffffff;">Corredor Industrial Sur</strong></div>
+              <div>• Protocolo Cuadrilla: <strong style="color: #10b981;">Acompañamiento Activado</strong></div>
+              <div>• Protección de Activos: <strong style="color: #38bdf8;">100% Sin Incidentes</strong></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Big ROI Payoff Banner -->
+        <div id="s3-payoff" class="glass-panel" style="width: 1400px; padding: 24px 60px; background: linear-gradient(90deg, rgba(16, 185, 129, 0.25) 0%, rgba(6, 182, 212, 0.25) 100%); border-color: rgba(16, 185, 129, 0.5); display: flex; align-items: center; justify-content: space-between;">
+          <div style="text-align: left;">
+            <div style="font-size: 28px; color: #a7f3d0; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Ahorro Neto Recuperado con Entrack:</div>
+            <div style="font-size: 60px; font-weight: 900; color: #ffffff; letter-spacing: -1.5px;">+$97.920.000 COP / año</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 64px; font-weight: 900; color: #10b981;">85%</div>
+            <div style="font-size: 28px; color: #e2e8f0; font-weight: 600;">Hardware Rescatado</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- SCENE 4: CLIMAX & CALL TO ACTION (13.5s - 18.0s)             -->
+      <!-- ============================================================ -->
+      <div id="scene4" class="scene clip" data-start="13.5" data-duration="4.5">
+        
+        <!-- Big Brand Mark -->
+        <div id="s4-brand-wrap" style="display: flex; align-items: center; gap: 24px; margin-bottom: 24px;">
+          <svg width="68" height="68" viewBox="0 0 24 24" fill="none">
+            <path d="M 8 9 L 2 13 L 8 19 L 12 3 L 16 19 L 22 13 L 16 9" stroke="#00f0ff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <span style="font-size: 72px; font-weight: 900; letter-spacing: -2px; color: #ffffff;">Entrack</span>
+        </div>
+
+        <h1 id="s4-title" style="font-size: 64px; font-weight: 900; text-align: center; max-width: 1350px; line-height: 1.15; margin-bottom: 24px; letter-spacing: -1.5px;">
+          Reduce pérdidas en un <span style="color: #00f0ff; text-shadow: 0 0 30px rgba(0, 240, 255, 0.6);">35%</span> y audita cada instalación en tiempo real.
+        </h1>
+
+        <p id="s4-desc" style="font-size: 32px; color: #94a3b8; font-weight: 500; text-align: center; max-width: 1000px; margin-bottom: 40px;">
+          La primera plataforma de inventario de telemetría con estándar Apple y arquitectura Zero-Trust.
         </p>
 
-        <div id="s4-cta" class="flex items-center gap-6">
-          <div class="px-10 py-5 rounded-full bg-[#0066cc] text-white text-xl font-bold shadow-2xl">
-            EntrackSystem • Demo Disponible
+        <!-- CTA Action Buttons with Cursor Simulation -->
+        <div id="s4-buttons" style="display: flex; gap: 28px; align-items: center; position: relative;">
+          
+          <!-- Animated Mouse Cursor -->
+          <svg id="s4-cursor" class="mouse-cursor" viewBox="0 0 24 24" fill="white" stroke="#000" stroke-width="1.5">
+            <path d="M3 3l7 18 3-7 7-3L3 3z" />
+          </svg>
+
+          <div id="cta-primary" style="padding: 22px 56px; border-radius: 9999px; background: #0066cc; color: #ffffff; font-size: 32px; font-weight: 800; border: 1px solid rgba(0, 240, 255, 0.4); box-shadow: 0 10px 40px rgba(0, 102, 204, 0.6); letter-spacing: -0.5px;">
+            Explorar Demo en Vivo
           </div>
-          <div class="px-8 py-5 rounded-full bg-white border border-gray-300 text-gray-800 text-xl font-bold shadow-sm">
+
+          <div style="padding: 22px 48px; border-radius: 9999px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2); color: #ffffff; font-size: 32px; font-weight: 700;">
             app.entrack.co
           </div>
         </div>
 
-        <div id="s4-footer" class="mt-16 text-center">
-          <p class="text-sm font-semibold text-gray-400 tracking-wider uppercase">Desarrollado y Distribuido por</p>
-          <p class="text-lg font-bold text-gray-800 tracking-tight">VERTICE CODEIUM</p>
+        <!-- Footer Signature -->
+        <div id="s4-footer" style="margin-top: 50px; text-align: center;">
+          <div style="font-size: 28px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;">
+            Desarrollado y Distribuido por
+          </div>
+          <div style="font-size: 32px; font-weight: 900; color: #cbd5e1; letter-spacing: 1px; margin-top: 4px;">
+            VERTICE CODEIUM
+          </div>
         </div>
+
       </div>
 
     </div>
 
-    <!-- GSAP Master Animation Timeline -->
+    <!-- GSAP Kinetic Timeline -->
     <script>
       const tl = gsap.timeline({ paused: true });
 
-      // SCENE 1: 0.0s - 4.5s
-      tl.to("#scene1", { opacity: 1, duration: 0.3 }, 0.0)
-        .fromTo("#s1-tag", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 0.2)
-        .fromTo("#s1-title", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, 0.4)
-        .fromTo("#s1-card", { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: "back.out(1.5)" }, 0.8)
-        .to("#scene1", { opacity: 0, scale: 0.96, duration: 0.4, ease: "power2.in" }, 4.1);
+      // Ambient Orbs Subtle Movement
+      tl.to("#orb-blue", { x: 80, y: 40, duration: 9, ease: "sine.inOut", yoyo: true, repeat: 1 }, 0.0)
+        .to("#orb-cyan", { x: -60, y: -50, duration: 9, ease: "sine.inOut", yoyo: true, repeat: 1 }, 0.0);
 
-      // SCENE 2: 4.5s - 9.0s
-      tl.to("#scene2", { opacity: 1, duration: 0.3 }, 4.5)
-        .fromTo("#s2-logo-wrap", { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "power3.out" }, 4.7)
-        .fromTo("#s2-title", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 5.0)
-        .fromTo("#s2-card", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, 5.3)
-        .to("#scene2", { opacity: 0, scale: 0.96, duration: 0.4, ease: "power2.in" }, 8.6);
+      // ==========================================
+      // SCENE 1: (0.0s - 4.2s) - Hook & Capital Leak
+      // ==========================================
+      tl.to("#scene1", { opacity: 1, duration: 0 }, 0.0)
+        .fromTo("#s1-headline", { scale: 0.96, opacity: 0.8 }, { scale: 1, opacity: 1, duration: 0.4, ease: "power4.out" }, 0.0)
+        .fromTo("#s1-badge", { y: -20, opacity: 0, scale: 0.9 }, { y: 0, opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.5)" }, 0.1)
+        .fromTo("#s1-card", { scale: 0.85, opacity: 0, y: 50 }, { scale: 1, opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 0.5)
+        // Dramatic Zoom-out / Exit
+        .to("#scene1", { opacity: 0, scale: 1.1, duration: 0.4, ease: "power2.in" }, 3.8);
 
-      // SCENE 3: 9.0s - 13.5s
-      tl.to("#scene3", { opacity: 1, duration: 0.3 }, 9.0)
-        .fromTo("#s3-title", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 9.2)
-        .fromTo("#s3-grid > div", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, stagger: 0.15, ease: "power3.out" }, 9.5)
-        .fromTo("#s3-savings", { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: "back.out(1.4)" }, 10.3)
-        .to("#scene3", { opacity: 0, scale: 0.96, duration: 0.4, ease: "power2.in" }, 13.1);
+      // ==========================================
+      // SCENE 2: (4.2s - 9.0s) - Reveal & Scanner
+      // ==========================================
+      tl.to("#scene2", { opacity: 1, duration: 0.2 }, 4.2)
+        .fromTo("#s2-brand", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, 4.3)
+        .fromTo("#s2-title", { y: 25, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, 4.6)
+        .fromTo("#s2-window", { scale: 0.9, opacity: 0, y: 40 }, { scale: 1, opacity: 1, y: 0, duration: 0.6, ease: "expo.out" }, 4.9)
+        // Laser Scan Animation
+        .fromTo("#laser-line", { y: 30, opacity: 0 }, { y: 330, opacity: 1, duration: 1.2, ease: "power1.inOut" }, 5.4)
+        .to("#laser-line", { opacity: 0, duration: 0.2 }, 6.6)
+        // Exit
+        .to("#scene2", { opacity: 0, scale: 0.95, duration: 0.4, ease: "power2.in" }, 8.6);
 
-      // SCENE 4: 13.5s - 18.0s
-      tl.to("#scene4", { opacity: 1, duration: 0.4 }, 13.5)
-        .fromTo("#scene4 svg", { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.7)" }, 13.7)
-        .fromTo("#s4-title", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, 14.0)
-        .fromTo("#s4-sub", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 14.3)
-        .fromTo("#s4-cta", { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: "back.out(1.5)" }, 14.7)
-        .fromTo("#s4-footer", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 15.3);
+      // ==========================================
+      // SCENE 3: (9.0s - 13.5s) - FDU & Radar
+      // ==========================================
+      tl.to("#scene3", { opacity: 1, duration: 0.2 }, 9.0)
+        .fromTo("#s3-headline", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, 9.2)
+        .fromTo("#s3-grid > div", { y: 40, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, scale: 1, stagger: 0.18, duration: 0.5, ease: "back.out(1.3)" }, 9.4)
+        .fromTo("#s3-payoff", { y: 30, opacity: 0, scale: 0.92 }, { y: 0, opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.4)" }, 10.3)
+        // Exit
+        .to("#scene3", { opacity: 0, scale: 0.95, duration: 0.4, ease: "power2.in" }, 13.1);
+
+      // ==========================================
+      // SCENE 4: (13.5s - 18.0s) - Climax & CTA
+      // ==========================================
+      tl.to("#scene4", { opacity: 1, duration: 0.2 }, 13.5)
+        .fromTo("#s4-brand-wrap", { scale: 0.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.8)" }, 13.7)
+        .fromTo("#s4-title", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power4.out" }, 14.0)
+        .fromTo("#s4-desc", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, 14.3)
+        .fromTo("#s4-buttons", { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.4)" }, 14.6)
+        .fromTo("#s4-footer", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 15.0)
+        // Simulated Mouse Cursor movement and Click on Primary CTA!
+        .fromTo("#s4-cursor", { x: 300, y: 150, opacity: 0 }, { x: 140, y: 30, opacity: 1, duration: 0.8, ease: "power2.out" }, 15.2)
+        .to("#cta-primary", { scale: 0.96, duration: 0.1, yoyo: true, repeat: 1, ease: "power1.inOut" }, 16.1);
 
       window.__timelines = window.__timelines || {};
       window.__timelines["main"] = tl;
